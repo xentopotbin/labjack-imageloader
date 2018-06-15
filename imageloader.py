@@ -36,8 +36,7 @@ class ImageLoader():
         for file in self.files:
             fileName = file.split('.')[0]
             if fileName.isdigit():
-                fileName = int(fileName)
-                self.imagedict[fileName] = ImageTk.PhotoImage(Image.open(file))
+                self.imagedict[int(fileName)] = ImageTk.PhotoImage(Image.open(file))
 
         #set desired window size
         w = 800
