@@ -21,5 +21,5 @@ On the LabJack, FI01 - FI07 correspond to binary bits 1 - 32.  When used with a 
 
 ## Acknowledgments
 
-* HeatfanJohn's answer about [ImageTk](https://raspberrypi.stackexchange.com/questions/18261/how-do-i-display-an-image-file-png-in-a-simple-window).
+* HeatfanJohn's answer about [Tkinter](https://raspberrypi.stackexchange.com/questions/18261/how-do-i-display-an-image-file-png-in-a-simple-window).
 * Mark Peterson & Tyler Blazey wrote the old C++ image loader that inspired this project.

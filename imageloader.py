@@ -1,9 +1,6 @@
 #!/usr/bin/python
 #   Image loader with LabJack v1.1                                  #
-#   Written 2017 by Virginia Heinen, Updated June 2018              #
-#   Inspired by Mark Peterson & Tyler Blazey's C++ image loader     #
 #   Uses LabJack digital reads to control a stimulus display        #
-#                                                                   #
 #####################################################################
 
 import tkinter as tk
@@ -14,6 +11,7 @@ import os
 
 class ImageLoader():
     def __init__(self):
+
         #create a tkinter root window
         self.root = tk.Tk()
 
@@ -24,18 +22,19 @@ class ImageLoader():
         self.root.config(cursor='none')
 
         #Load up error images
-        self.imageLJError =  ImageTk.PhotoImage(Image.open("labjack_error.png"))   #error image
-        self.imageNotFound =  ImageTk.PhotoImage(Image.open("image_error.png"))  #error image
+        self.imageLJError =  ImageTk.PhotoImage(Image.open("labjack_error.png"))
+        self.imageNotFound =  ImageTk.PhotoImage(Image.open("image_error.png"))
 
         #Load up numbered images and put them in a dictionary
-        #Will read in all images saved as "XX.png" where XX is a number between 0 - 63
-        self.imagedict= {}      #ake an empty dictionary
+        #Key = LJ input that should call the image, value = image object
+        #Will read in all images saved as "XX.png"
+        self.imagedict= {}            #make an empty dictionary
 
         self.files = os.listdir()     #lists all files in current directory
 
         for file in self.files:
             fileName = file.split('.')[0]
-            if fileName.isdigit():
+            if fileName.isdigit(): #only use filenames that are numbers
                 self.imagedict[int(fileName)] = ImageTk.PhotoImage(Image.open(file))
 
         #set desired window size
@@ -46,11 +45,11 @@ class ImageLoader():
         x = 0
         y = 0
 
-        #list to hold lj reads
-        self.lj = [0,0,0,0,0,0]
-
         #apply size and coordinates to root window
         self.root.geometry("%dx%d+%d+%d" % (w, h, x, y))
+
+        #list to hold lj reads
+        self.lj = [0,0,0,0,0,0]
 
         #display a blank image
         #Should be keyed to 0 in the dictionary
@@ -59,9 +58,6 @@ class ImageLoader():
 
         self.panel1.pack(side=tk.TOP, fill=tk.BOTH, expand=tk.YES)
         self.currentImage = self.imagedict.get(0, self.imageNotFound)
-
-        #Used to be a big "connect to labjack" section here
-        #Let's see how well it works without it..
 
         #begin main loop
         self.root.after(50, self.read_labjack)
@@ -90,9 +86,9 @@ class ImageLoader():
                 #update with matching image from dictionary
                 self.update_image(self.imagedict.get(self.ljNum, self.imageNotFound))
 
-        except (u3.LabJackException, TypeError):  #No response from LJ?
-            self.initialize_labjack()       #attempt to re-initialize
-            time.sleep(0.3)                 #Don't need to poll so often
+        except (u3.LabJackException, TypeError):    #No response from LJ?
+            self.initialize_labjack()               #attempt to re-initialize
+            time.sleep(0.3)                         #Don't need to poll so often
         finally:
             self.root.after(50, self.read_labjack)  #callback
 
